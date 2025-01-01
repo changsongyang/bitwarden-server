@@ -6,7 +6,6 @@ using Bit.Core.Services;
 using Bit.Core.Tools.Repositories;
 using Bit.Core.Vault.Repositories;
 using Microsoft.AspNetCore.Identity;
-using Bit.Core.KeyManagement.UserKey;
 
 namespace Bit.Core.KeyManagement.UserKey.Implementations;
 
