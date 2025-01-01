@@ -1,6 +1,6 @@
 ﻿using Bit.Core.Enums;
 
-namespace Bit.Core.Auth.Models.Data;
+namespace Bit.Core.KeyManagement.Models.Data;
 
 public class MasterPasswordUnlockData
 {

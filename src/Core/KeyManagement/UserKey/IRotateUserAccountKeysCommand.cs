@@ -1,5 +1,5 @@
-﻿using Bit.Core.Auth.Models.Data;
-using Bit.Core.Entities;
+﻿using Bit.Core.Entities;
+using Bit.Core.KeyManagement.Models.Data;
 using Microsoft.AspNetCore.Identity;
 
 namespace Bit.Core.KeyManagement.UserKey;

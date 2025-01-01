@@ -1,6 +1,6 @@
-﻿using Bit.Core.Auth.Models.Data;
-using Bit.Core.Auth.Repositories;
+﻿using Bit.Core.Auth.Repositories;
 using Bit.Core.Entities;
+using Bit.Core.KeyManagement.Models.Data;
 using Bit.Core.Repositories;
 using Bit.Core.Services;
 using Bit.Core.Tools.Repositories;
