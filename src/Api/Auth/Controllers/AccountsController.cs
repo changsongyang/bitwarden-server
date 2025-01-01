@@ -430,7 +430,6 @@ public class AccountsController : Controller
             throw new UnauthorizedAccessException();
         }
 
-
         var unlockData = new MasterPasswordUnlockData
         {
             KdfType = model.MasterPasswordUnlockData.KdfType,
@@ -467,7 +466,6 @@ public class AccountsController : Controller
             ModelState.AddModelError(string.Empty, error.Description);
         }
 
-        await Task.Delay(2000);
         throw new BadRequestException(ModelState);
     }
 
