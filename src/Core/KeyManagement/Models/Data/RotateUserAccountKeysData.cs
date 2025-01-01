@@ -1,5 +1,5 @@
-﻿using Bit.Core.Auth.Models.Data;
-using Bit.Core.Auth.Entities;
+﻿using Bit.Core.Auth.Entities;
+using Bit.Core.Auth.Models.Data;
 using Bit.Core.Entities;
 using Bit.Core.Tools.Entities;
 using Bit.Core.Vault.Entities;
