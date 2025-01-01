@@ -429,15 +429,22 @@ public class AccountsController : Controller
             throw new UnauthorizedAccessException();
         }
 
+
+        var unlockData = new MasterPasswordUnlockData
+        {
+            KdfType = model.MasterPasswordUnlockData.KdfType,
+            KdfIterations = model.MasterPasswordUnlockData.KdfIterations,
+            KdfMemory = model.MasterPasswordUnlockData.KdfMemory,
+            KdfParallelism = model.MasterPasswordUnlockData.KdfParallelism,
+            Email = model.MasterPasswordUnlockData.Email,
+            MasterPasswordHash = model.MasterPasswordUnlockData.MasterPasswordHash,
+            MasterKeyEncryptedUserKey = model.MasterPasswordUnlockData.MasterKeyEncryptedUserKey
+        };
+
         var dataModel = new RotateUserAccountKeysData
         {
-            KdfType = model.KdfType,
-            KdfIterations = model.KdfIterations,
-            KdfMemory = model.KdfMemory,
-            KdfParallelism = model.KdfParallelism,
-            Email = model.Email,
-            MasterPasswordHash = model.MasterPasswordHash,
-            MasterKeyEncryptedUserKey = model.MasterKeyEncryptedUserKey,
+            MasterPasswordUnlockData = unlockData,
+            OldMasterPasswordHash = model.OldMasterPasswordHash,
             UserKeyEncryptedPrivateKey = model.UserKeyEncryptedPrivateKey,
             Ciphers = await _cipherValidator.ValidateAsync(user, model.Ciphers),
             Folders = await _folderValidator.ValidateAsync(user, model.Folders),

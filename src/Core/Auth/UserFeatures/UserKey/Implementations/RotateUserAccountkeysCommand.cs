@@ -22,6 +22,7 @@ public class RotateUserAccountKeysCommand : IRotateUserAccountKeysCommand
     private readonly IPushNotificationService _pushService;
     private readonly IdentityErrorDescriber _identityErrorDescriber;
     private readonly IWebAuthnCredentialRepository _credentialRepository;
+    private readonly IPasswordHasher<User> _passwordHasher;
 
     /// <summary>
     /// Instantiates a new <see cref="RotateUserAccountKeysCommand"/>
@@ -37,6 +38,7 @@ public class RotateUserAccountKeysCommand : IRotateUserAccountKeysCommand
     public RotateUserAccountKeysCommand(IUserService userService, IUserRepository userRepository,
         ICipherRepository cipherRepository, IFolderRepository folderRepository, ISendRepository sendRepository,
         IEmergencyAccessRepository emergencyAccessRepository, IOrganizationUserRepository organizationUserRepository,
+        IPasswordHasher<User> passwordHasher,
         IPushNotificationService pushService, IdentityErrorDescriber errors, IWebAuthnCredentialRepository credentialRepository)
     {
         _userService = userService;
@@ -49,6 +51,7 @@ public class RotateUserAccountKeysCommand : IRotateUserAccountKeysCommand
         _pushService = pushService;
         _identityErrorDescriber = errors;
         _credentialRepository = credentialRepository;
+        _passwordHasher = passwordHasher;
     }
 
     /// <inheritdoc />
@@ -59,12 +62,12 @@ public class RotateUserAccountKeysCommand : IRotateUserAccountKeysCommand
             throw new ArgumentNullException(nameof(user));
         }
 
-        if (!await _userService.CheckPasswordAsync(user, model.MasterPasswordHash))
+        if (!await _userService.CheckPasswordAsync(user, model.OldMasterPasswordHash))
         {
             return IdentityResult.Failed(_identityErrorDescriber.PasswordMismatch());
         }
 
-        if (user.Email != model.Email)
+        if (user.Email != model.MasterPasswordUnlockData.Email)
         {
             throw new InvalidOperationException("User email does not match the provided email.");
         }
@@ -74,19 +77,20 @@ public class RotateUserAccountKeysCommand : IRotateUserAccountKeysCommand
         user.LastKeyRotationDate = now;
         user.SecurityStamp = Guid.NewGuid().ToString();
 
-        user.Kdf = model.KdfType;
-        user.KdfIterations = model.KdfIterations;
-        if (model.KdfMemory != null)
+        user.Kdf = model.MasterPasswordUnlockData.KdfType;
+        user.KdfIterations = model.MasterPasswordUnlockData.KdfIterations;
+        if (model.MasterPasswordUnlockData.KdfMemory != null)
         {
-            user.KdfMemory = model.KdfMemory;
+            user.KdfMemory = model.MasterPasswordUnlockData.KdfMemory;
         }
-        if (model.KdfParallelism != null)
+        if (model.MasterPasswordUnlockData.KdfParallelism != null)
         {
-            user.KdfParallelism = model.KdfParallelism;
+            user.KdfParallelism = model.MasterPasswordUnlockData.KdfParallelism;
         }
 
-        user.Key = model.MasterKeyEncryptedUserKey;
+        user.Key = model.MasterPasswordUnlockData.MasterKeyEncryptedUserKey;
         user.PrivateKey = model.UserKeyEncryptedPrivateKey;
+        user.MasterPassword = _passwordHasher.HashPassword(user, model.MasterPasswordUnlockData.MasterPasswordHash);
 
         if (model.Ciphers.Any() || model.Folders.Any() || model.Sends.Any() || model.EmergencyAccesses.Any() ||
             model.OrganizationUsers.Any() || model.WebAuthnKeys.Any())
