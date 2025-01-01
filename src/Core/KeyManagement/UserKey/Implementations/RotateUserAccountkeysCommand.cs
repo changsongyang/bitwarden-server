@@ -6,8 +6,9 @@ using Bit.Core.Services;
 using Bit.Core.Tools.Repositories;
 using Bit.Core.Vault.Repositories;
 using Microsoft.AspNetCore.Identity;
+using Bit.Core.KeyManagement.UserKey;
 
-namespace Bit.Core.Auth.UserFeatures.UserKey.Implementations;
+namespace Bit.Core.KeyManagement.UserKey.Implementations;
 
 /// <inheritdoc />
 public class RotateUserAccountKeysCommand : IRotateUserAccountKeysCommand

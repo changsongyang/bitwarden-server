@@ -2,7 +2,7 @@
 using Bit.Core.Entities;
 using Microsoft.AspNetCore.Identity;
 
-namespace Bit.Core.Auth.UserFeatures.UserKey;
+namespace Bit.Core.KeyManagement.UserKey;
 
 /// <summary>
 /// Responsible for rotation of a user key and updating database with re-encrypted data
