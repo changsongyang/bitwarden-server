@@ -33,8 +33,11 @@ public class RotateUserAccountKeysCommand : IRotateUserAccountKeysCommand
     /// <param name="folderRepository">Provides a method to update re-encrypted folder data</param>
     /// <param name="sendRepository">Provides a method to update re-encrypted send data</param>
     /// <param name="emergencyAccessRepository">Provides a method to update re-encrypted emergency access data</param>
+    /// <param name="organizationUserRepository">Provides a method to update re-encrypted organization user data</param>
+    /// <param name="passwordHasher">Hashes the new master password</param>
     /// <param name="pushService">Logs out user from other devices after successful rotation</param>
     /// <param name="errors">Provides a password mismatch error if master password hash validation fails</param>
+    /// <param name="credentialRepository">Provides a method to update re-encrypted WebAuthn keys</param>
     public RotateUserAccountKeysCommand(IUserService userService, IUserRepository userRepository,
         ICipherRepository cipherRepository, IFolderRepository folderRepository, ISendRepository sendRepository,
         IEmergencyAccessRepository emergencyAccessRepository, IOrganizationUserRepository organizationUserRepository,
